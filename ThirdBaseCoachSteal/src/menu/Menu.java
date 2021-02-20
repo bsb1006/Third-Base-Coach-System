@@ -713,7 +713,7 @@ public class Menu {
 		//=========================================================//
 					
 				case 0:
-					System.out.println("Goodbye!");
+					System.out.println("Goodbye.");
 					run = false;
 					//var.close();
 					//des.close();
