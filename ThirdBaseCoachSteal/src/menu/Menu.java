@@ -1,6 +1,7 @@
 package menu;
 
 import java.util.*;
+import java.io.*;
 
 public class Menu {
 	public static void main(String[] args) {
@@ -19,7 +20,9 @@ public class Menu {
 		Vector<String> descriptionVector = new Vector<String>(); // Holds the descriptions to what each variable means
 		
 		Vector<String> sequenceVector = new Vector<String>(); // Holds the sequences
-		Vector<String> stealVector = new Vector<String>(); // Holds the results of each sequence
+		Vector<Integer> stealVector = new Vector<Integer>(); // Holds the results of each sequence
+		
+		Vector<String> dataVector = new Vector<String>();
 		
 		Scanner var = new Scanner(System.in);
 		Scanner des = new Scanner(System.in);
@@ -64,9 +67,19 @@ public class Menu {
 								boolean loop = true;
 								while (loop == true) {
 									duplicate = false;
-									System.out.println("Enter a character (only the first character will be used): ");
-									variable = var.next().charAt(0);
+									System.out.println("Enter an alphabetic character (only the first character will be used): ");
 
+									variable = var.next().charAt(0);
+									
+									while (Character.isAlphabetic(variable) == false) 
+									{
+										System.out.println("That is not an alphabetic character, try again.");
+										variable = var.next().charAt(0);
+									}
+									
+									if (Character.isLowerCase(variable) == true)
+										variable = Character.toUpperCase(variable);
+										
 									// This checks to see if the variable already exists. 
 									
 									for (i = 0; i < variable_num; i++) {
@@ -150,8 +163,17 @@ public class Menu {
 										
 										switch (change) {
 											case 1:
-												System.out.println("Enter a character (only the first character will be used): ");
+												System.out.println("Enter an alphabetic character (only the first character will be used): ");
 												variable = var.next().charAt(0);
+												
+												while (Character.isAlphabetic(variable) == false) 
+												{
+													System.out.println("That is not an alphabetic character, try again.");
+													variable = var.next().charAt(0);
+												}
+												
+												if (Character.isLowerCase(variable) == true)
+													variable = Character.toUpperCase(variable);
 
 												for (i = 0; i < variable_num; i++) {
 													if (variable == variableVector.get(i)) {
@@ -198,6 +220,15 @@ public class Menu {
 												System.out.println("Enter a character (only the first character will be used): ");
 												variable = var.next().charAt(0);
 
+												while (Character.isAlphabetic(variable) == false) 
+												{
+													System.out.println("That is not an alphabetic character, try again.");
+													variable = var.next().charAt(0);
+												}
+												
+												if (Character.isLowerCase(variable) == true)
+													variable = Character.toUpperCase(variable);
+												
 												for (i = 0; i < variable_num; i++) {
 													if (variable == variableVector.get(i)) {
 														System.out.println("That variable already exists.");
@@ -341,7 +372,6 @@ public class Menu {
 									int wrong = 0;
 									int correct = 0;
 									int steal = 0;
-									String result;
 									System.out.println("Enter a sequence: ");
 									
 									sequence = des.nextLine();
@@ -378,25 +408,25 @@ public class Menu {
 									}
 									
 									if (wrong == 0) {
-										System.out.println("If this sequences was a steal, press 1.");
+										System.out.println("If this sequence was a steal, press 1.");
 										steal = var.nextInt();
 										
-										if (steal == 1)
-											result = "Yes";
-										
-										else
-											result = "No";
+										if (steal != 1)
+											steal = 0;
 										
 										sequence_num += 1;
 										
 										sequenceVector.add(sequence);
-										stealVector.add(result);
+										stealVector.add(steal);
 										
 										System.out.println("Sequences: ");
 										
 										for (i = 0; i < sequence_num; i++) {
 											System.out.print(sequenceVector.get(i) + ": ");
-											System.out.print(stealVector.get(i) + "\n");
+											if (stealVector.get(i) == 1)
+												System.out.print("Yes\n");
+											else
+												System.out.print("No\n");
 										}
 									}
 										
@@ -429,7 +459,10 @@ public class Menu {
 										System.out.println("Select a sequence to edit: ");
 										for (i = 0; i < sequence_num; i++) {
 											System.out.print(i + " " + sequenceVector.get(i) + ": ");
-											System.out.print(stealVector.get(i) + "\n");
+											if (stealVector.get(i) == 1)
+												System.out.print("Yes\n");
+											else
+												System.out.print("No\n");
 										}
 										
 										int edit = var.nextInt();
@@ -450,7 +483,6 @@ public class Menu {
 													wrong = 0;
 													int correct = 0;
 													int steal = 0;
-													String result;
 													System.out.println("Enter a sequence: ");
 														
 													sequence = des.nextLine();
@@ -492,7 +524,10 @@ public class Menu {
 														
 														for (i = 0; i < sequence_num; i++) {
 															System.out.print(sequenceVector.get(i) + ": ");
-															System.out.print(stealVector.get(i) + "\n");
+															if (stealVector.get(i) == 1)
+																System.out.print("Yes\n");
+															else
+																System.out.print("No\n");
 														}
 													}
 
@@ -503,19 +538,19 @@ public class Menu {
 													System.out.println("If this sequences was a steal, press 1.");
 													steal = var.nextInt();
 
-													if (steal == 1)
-														result = "Yes";
+													if (steal != 1)
+														steal = 0;
 													
-													else
-														result = "No";
-													
-													stealVector.set(edit, result);
+													stealVector.set(edit, steal);
 													
 													System.out.println("Sequences: ");
 													
 													for (i = 0; i < sequence_num; i++) {
 														System.out.print(sequenceVector.get(i) + ": ");
-														System.out.print(stealVector.get(i) + "\n");
+														if (stealVector.get(i) == 1)
+															System.out.print("Yes\n");
+														else
+															System.out.print("No\n");
 													}
 												
 													break;
@@ -559,20 +594,20 @@ public class Menu {
 														System.out.println("If this sequences was a steal, press 1.");
 														steal = var.nextInt();
 
-														if (steal == 1)
-															result = "Yes";
-														
-														else
-															result = "No";
+														if (steal != 1)
+															steal = 0;
 														
 														sequenceVector.set(edit, sequence);
-														stealVector.set(edit, result);
+														stealVector.set(edit, steal);
 														
 														System.out.println("Sequences: ");
 														
 														for (i = 0; i < sequence_num; i++) {
 															System.out.print(sequenceVector.get(i) + ": ");
-															System.out.print(stealVector.get(i) + "\n");
+															if (stealVector.get(i) == 1)
+																System.out.print("Yes\n");
+															else
+																System.out.print("No\n");
 														}
 													}
 													
@@ -614,7 +649,10 @@ public class Menu {
 										System.out.println("Select a sequence to delete: ");
 										for (i = 0; i < sequence_num; i++) {
 											System.out.print(i + " " + sequenceVector.get(i) + ": ");
-											System.out.print(stealVector.get(i) + "\n");
+											if (stealVector.get(i) == 1)
+												System.out.print("Yes\n");
+											else
+												System.out.print("No\n");
 										}
 										
 										int edit = var.nextInt();
@@ -633,7 +671,10 @@ public class Menu {
 												
 											for (i = 0; i < sequence_num; i++) {
 												System.out.print(i + " " + sequenceVector.get(i) + ": ");
-												System.out.print(stealVector.get(i) + "\n");
+												if (stealVector.get(i) == 1)
+													System.out.print("Yes\n");
+												else
+													System.out.print("No\n");
 											}
 												
 											System.out.println("Enter 1 to delete more sequences.");
@@ -668,7 +709,53 @@ public class Menu {
 		//=========================================================//
 		//                      PREDICTION                         //
 				case 3:
-					System.out.println("3");
+					if (sequence_num <= 0)
+						System.out.println("There are not enough sequences to make a prediction on.");
+					
+					else {
+						for (i = 0; i < sequence_num; i++) {
+							dataVector.add(sequenceVector.get(i) + " " + stealVector.get(i));
+							//System.out.println(dataVector.get(i));
+						}
+						
+						try {
+							File myObj = new File("data.txt");
+							
+							if (myObj.createNewFile())
+								System.out.println("File created: " + myObj.getName());
+							else {
+								myObj.delete();
+								myObj.createNewFile();
+								System.out.println("Overwrote the file: " + myObj.getName());
+							}
+							
+						} catch (IOException e) {
+							System.out.println("An error occurred.");
+							e.printStackTrace();
+						}
+						
+						try {
+							FileWriter dataWriter = new FileWriter("data.txt");
+							
+							for (i = 0; i < sequence_num; i++) {
+								dataWriter.write(dataVector.get(i) + "\n");
+								System.out.println(dataVector.get(i));
+								
+								if (i == sequence_num - 1)
+									dataWriter.close();
+							}
+							
+							System.out.println("Wrote to the file.");
+							
+						} catch (IOException e) {
+							System.out.println("An error occured.");
+							e.printStackTrace();
+						}
+						
+						TwoPartAlgorithm predictor = new TwoPartAlgorithm();
+						predictor.main(args);
+					}
+					
 					break;
 					
 		//=========================================================//
@@ -715,8 +802,6 @@ public class Menu {
 				case 0:
 					System.out.println("Goodbye.");
 					run = false;
-					//var.close();
-					//des.close();
 					break;
 					
 				default:
@@ -728,4 +813,3 @@ public class Menu {
 	des.close();
 	}
 }
-
