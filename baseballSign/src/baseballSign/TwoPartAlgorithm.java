@@ -264,19 +264,29 @@ public boolean threeStep(File userFile)
 
 				//this is the first line in the file that will be broken down and used to search for a pattern
 				fileStr = sc.nextLine();
-				
+				//System.out.println("fileStr: " + fileStr);
 				//checks each line for a pattern
 				while(sc.hasNextLine() == true)
 				{					
 					tempStr = sc.nextLine();
-					//checks for a set of characters
-					checkVal = fileStr.substring(i, i+3);
+					
+					//Checking if it equals three because the steal signal could be the whole fileStr
+					if(fileStr.length() == 3) 
+					{
+						checkVal = fileStr;
+						//System.out.println("Caught CheckVal: " + checkVal);
+					}
+					else
+					{
+						//checks for a set of characters
+						checkVal = fileStr.substring(i, i+3);
+					}
 					
 //					System.out.println("Checking for sequence: " + checkVal);
 					lineCount = lineCount +1;
 					
 					//checks to make sure we don't try to access outside of the string length
-					if((i+3)>=fileStr.length())
+					if((i+3)>fileStr.length())
 					{
 						System.out.println("End of string");
 						sc.close();
@@ -365,8 +375,16 @@ public boolean wildStep(File userFile)
 				while(sc.hasNextLine() == true)
 				{					
 					tempStr = sc.nextLine();
-					//checks for a set of characters
-					checkVal = fileStr.substring(i, i+3);
+					//Checking if it equals three because the steal signal could be the whole fileStr
+					if(fileStr.length() == 3) 
+					{
+						checkVal = fileStr;
+					}
+					else
+					{
+						//checks for a set of characters
+						checkVal = fileStr.substring(i, i+3);
+					}
 					
 ////////////////////////////////////USE THIS FOR THE WILD CHAR CHECK///////////////////////////////////					
 					//sets signal 1 and 3 and ignores the middle character 
@@ -385,7 +403,7 @@ public boolean wildStep(File userFile)
 					lineCount = lineCount +1;
 					
 					//checks to make sure we don't try to access outside of the string length
-					if((i+3)>=fileStr.length())
+					if((i+3)>fileStr.length())
 					{
 						System.out.println("End of string");
 						sc.close();
