@@ -95,7 +95,7 @@ class Determine
 
 	//The user input will contain an int that tell us if the player stole or not
 	//That will be used to sort the input string into the correct file
-	public void sortInput(File userFile, File newFile)
+	public void sortInput(File userFile, File newFile, File noStealFile)
 	{
 		try 
 		{
@@ -105,11 +105,19 @@ class Determine
 				newFile.delete();
 				newFile.createNewFile();
 			}
+			if(noStealFile.length() >= 0)
+			{
+				noStealFile.delete();
+				noStealFile.createNewFile();
+			}
 			
 			Scanner sortSc = new Scanner(userFile);
 			FileWriter fileWrite = new FileWriter(newFile);
+			FileWriter noStlWrite = new FileWriter(noStealFile);
 			BufferedWriter buffWrite = new BufferedWriter(fileWrite);
+			BufferedWriter noStlBuff = new BufferedWriter(noStlWrite);
 			String steal = String.valueOf("1");
+			String noSteal = String.valueOf("0");
 			
 			//searches every file line
 			while(sortSc.hasNextLine() == true)
@@ -123,9 +131,15 @@ class Determine
 					buffWrite.write(fLine[0]);
 					buffWrite.newLine();
 				}
+				if(fLine[1].endsWith(noSteal))
+				{
+					noStlBuff.write(fLine[0]);
+					noStlBuff.newLine();
+				}
 			}
 			//close up scanner and buffered writer
 			buffWrite.close();
+			noStlBuff.close();
 			sortSc.close();
 		}
 		
@@ -483,7 +497,7 @@ public class TwoPartAlgorithm {
 		check.doesExist(stlFile);
 		check.doesExist(noStlFile);
 		
-		find.sortInput(allData, stlFile);
+		find.sortInput(allData, stlFile, noStlFile);
 
 		if(find.threeStep(stlFile) == false)
 		{
