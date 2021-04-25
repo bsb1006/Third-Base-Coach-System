@@ -1,6 +1,8 @@
 package menu;
 
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.io.*;
 
 public class Menu {
@@ -847,21 +849,50 @@ public class Menu {
 							//System.out.println(dataVector.get(i));
 						}
 						
-						for (i = 0; i < sequence_num; i++) {
-							tempStr = dataVector.get(i);
-							if (tempStr.contains(key) == true) {
-								if (tempStr.contains("1") == true)
-									TP += 1;
-								else
-									FN += 1;
-							}
+						if (key.contains(".")) {
+							String start = String.valueOf(key.charAt(0));
+							String end = String.valueOf(key.charAt(2));
+							Pattern wild = Pattern.compile(start + '.' + end);
+							//Matcher match = wild.matcher(tempStr);
 							
-							else {
-								if (tempStr.contains("0") == true)
-									TN += 1;
+							for (i = 0; i < sequence_num; i++) {
+								tempStr = dataVector.get(i);
+								Matcher match = wild.matcher(tempStr);
+								boolean found = match.find();
+								if (found == true) {
+									if (tempStr.contains("1") == true)
+										TP += 1;
+									else
+										FN += 1;
+								}
 								
-								else
-									FP += 1;
+								else {
+									if (tempStr.contains("0") == true)
+										TN += 1;
+									
+									else
+										FP += 1;
+								}
+							}
+						}
+						
+						else {
+							for (i = 0; i < sequence_num; i++) {
+								tempStr = dataVector.get(i);
+								if (tempStr.contains(key) == true) {
+									if (tempStr.contains("1") == true)
+										TP += 1;
+									else
+										FN += 1;
+								}
+								
+								else {
+									if (tempStr.contains("0") == true)
+										TN += 1;
+									
+									else
+										FP += 1;
+								}
 							}
 						}
 						
