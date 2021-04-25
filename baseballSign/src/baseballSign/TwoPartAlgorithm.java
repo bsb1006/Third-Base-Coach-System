@@ -95,7 +95,7 @@ class Determine
 
 	//The user input will contain an int that tell us if the player stole or not
 	//That will be used to sort the input string into the correct file
-	public void sortInput(File userFile, File newFile)
+	public void sortInput(File userFile, File newFile, File noStealFile)
 	{
 		try 
 		{
@@ -105,11 +105,19 @@ class Determine
 				newFile.delete();
 				newFile.createNewFile();
 			}
+			if(noStealFile.length() >= 0)
+			{
+				noStealFile.delete();
+				noStealFile.createNewFile();
+			}
 			
 			Scanner sortSc = new Scanner(userFile);
 			FileWriter fileWrite = new FileWriter(newFile);
+			FileWriter noStlWrite = new FileWriter(noStealFile);
 			BufferedWriter buffWrite = new BufferedWriter(fileWrite);
+			BufferedWriter noStlBuff = new BufferedWriter(noStlWrite);
 			String steal = String.valueOf("1");
+			String noSteal = String.valueOf("0");
 			
 			//searches every file line
 			while(sortSc.hasNextLine() == true)
@@ -123,9 +131,15 @@ class Determine
 					buffWrite.write(fLine[0]);
 					buffWrite.newLine();
 				}
+				if(fLine[1].endsWith(noSteal))
+				{
+					noStlBuff.write(fLine[0]);
+					noStlBuff.newLine();
+				}
 			}
 			//close up scanner and buffered writer
 			buffWrite.close();
+			noStlBuff.close();
 			sortSc.close();
 		}
 		
@@ -264,19 +278,29 @@ public boolean threeStep(File userFile)
 
 				//this is the first line in the file that will be broken down and used to search for a pattern
 				fileStr = sc.nextLine();
-				
+				//System.out.println("fileStr: " + fileStr);
 				//checks each line for a pattern
 				while(sc.hasNextLine() == true)
 				{					
 					tempStr = sc.nextLine();
-					//checks for a set of characters
-					checkVal = fileStr.substring(i, i+3);
+					
+					//Checking if it equals three because the steal signal could be the whole fileStr
+					if(fileStr.length() == 3) 
+					{
+						checkVal = fileStr;
+						//System.out.println("Caught CheckVal: " + checkVal);
+					}
+					else
+					{
+						//checks for a set of characters
+						checkVal = fileStr.substring(i, i+3);
+					}
 					
 //					System.out.println("Checking for sequence: " + checkVal);
 					lineCount = lineCount +1;
 					
 					//checks to make sure we don't try to access outside of the string length
-					if((i+3)>=fileStr.length())
+					if((i+3)>fileStr.length())
 					{
 						System.out.println("End of string");
 						sc.close();
@@ -365,8 +389,16 @@ public boolean wildStep(File userFile)
 				while(sc.hasNextLine() == true)
 				{					
 					tempStr = sc.nextLine();
-					//checks for a set of characters
-					checkVal = fileStr.substring(i, i+3);
+					//Checking if it equals three because the steal signal could be the whole fileStr
+					if(fileStr.length() == 3) 
+					{
+						checkVal = fileStr;
+					}
+					else
+					{
+						//checks for a set of characters
+						checkVal = fileStr.substring(i, i+3);
+					}
 					
 ////////////////////////////////////USE THIS FOR THE WILD CHAR CHECK///////////////////////////////////					
 					//sets signal 1 and 3 and ignores the middle character 
@@ -385,7 +417,7 @@ public boolean wildStep(File userFile)
 					lineCount = lineCount +1;
 					
 					//checks to make sure we don't try to access outside of the string length
-					if((i+3)>=fileStr.length())
+					if((i+3)>fileStr.length())
 					{
 						System.out.println("End of string");
 						sc.close();
@@ -465,7 +497,7 @@ public class TwoPartAlgorithm {
 		check.doesExist(stlFile);
 		check.doesExist(noStlFile);
 		
-		find.sortInput(allData, stlFile);
+		find.sortInput(allData, stlFile, noStlFile);
 
 		if(find.threeStep(stlFile) == false)
 		{
