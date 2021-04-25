@@ -176,6 +176,7 @@ class Determine
 							if(lineCount + 1 == fileLines)
 							{
 								System.out.println("Steal Sequence found: " + checkVal);
+								Menu.key = checkVal;
 								break;
 							}
 

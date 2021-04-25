@@ -4,6 +4,8 @@ import java.util.*;
 import java.io.*;
 
 public class Menu {
+	public static String key;
+
 	public static void main(String[] args) {
 		//========================================================//
 		//                      MAIN MENU                         //
@@ -28,6 +30,11 @@ public class Menu {
 		
 		Scanner var = new Scanner(System.in);
 		Scanner des = new Scanner(System.in);
+		
+		int TP = 0;
+		int FP = 0;
+		int TN = 0;
+		int FN = 0;
 		
 		while (run == true) {
 			System.out.println("Select an option: \n"
@@ -828,8 +835,59 @@ public class Menu {
 					if (phase != 2)
 						System.out.println("A prediction has not been made yet.");
 					
+					else if (sequence_num <= 0)
+						System.out.println("There are not enough sequences to test the accuracy of the prediction.");
+					
 					else {
-						System.out.println("4");
+						String tempStr;
+						dataVector.clear();
+						
+						for (i = 0; i < sequence_num; i++) {
+							dataVector.add(sequenceVector.get(i) + " " + stealVector.get(i));
+							//System.out.println(dataVector.get(i));
+						}
+						
+						for (i = 0; i < sequence_num; i++) {
+							tempStr = dataVector.get(i);
+							if (tempStr.contains(key) == true) {
+								if (tempStr.contains("1") == true)
+									TP += 1;
+								else
+									FN += 1;
+							}
+							
+							else {
+								if (tempStr.contains("0") == true)
+									TN += 1;
+								
+								else
+									FP += 1;
+							}
+						}
+						
+						System.out.println("TP: " + TP
+								+ "\nFP: " + FP
+								+ "\nTN: " + TN
+								+ "\nFN: " + FN);
+						
+						double accuracy = TN + TP;
+						accuracy = accuracy / sequence_num;
+						accuracy *= 100;
+						
+						double precision = TP;
+						precision = precision / (TP + FP);
+						precision *= 100;
+						
+						double recall = TP;
+						recall = recall / (TP + FN);
+						recall *= 100;
+						
+						double F1 = 2 * ((precision * recall) / (precision + recall));
+						
+						System.out.println("Accuracy: " + accuracy + "%");
+						System.out.println("Precision: " + precision + "%");
+						System.out.println("Recall: " + recall + "%");
+						System.out.println("F1 Score: " + F1 + "%");
 					}
 					
 					break;
