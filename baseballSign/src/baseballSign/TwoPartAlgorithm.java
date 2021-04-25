@@ -300,7 +300,7 @@ public boolean threeStep(File userFile)
 					lineCount = lineCount +1;
 					
 					//checks to make sure we don't try to access outside of the string length
-					if((i+3)>fileStr.length())
+					if((i+3)>=fileStr.length())
 					{
 						System.out.println("End of string");
 						sc.close();
@@ -417,7 +417,7 @@ public boolean wildStep(File userFile)
 					lineCount = lineCount +1;
 					
 					//checks to make sure we don't try to access outside of the string length
-					if((i+3)>fileStr.length())
+					if((i+3)>=fileStr.length())
 					{
 						System.out.println("End of string");
 						sc.close();
@@ -486,7 +486,7 @@ public class TwoPartAlgorithm {
 	public static void main(String args[])
 	{
 		//for testing, change this -----v to either AllData, AllData2, AllData3. Each has a different kind of steal signal
-		File allData = new File("AllData3.txt");
+		File allData = new File("AllData2.txt");
 		File stlFile = new File("StealFile.txt");
 		File noStlFile = new File("NoStealFile.txt");
 
